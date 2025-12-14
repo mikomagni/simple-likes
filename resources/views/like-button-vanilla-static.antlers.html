@@ -1,0 +1,60 @@
+{{# Simple Likes Button Template - Vanilla JS Static/Non-Cached Version #}}
+{{# Uses vanilla JavaScript with server-rendered state #}}
+{{# For sites WITHOUT static caching and WITHOUT Alpine.js #}}
+
+{{#
+    REQUIRED: Add the vanilla JS static version to your site (once):
+
+    Option A: Import in your site.js
+    import '../../vendor/mikomagni/simple-likes/resources/js/simple-likes-vanilla-static.js';
+
+    Option B: Include via script tag
+    <script src="/vendor/simple-likes/js/simple-likes-vanilla-static.js" defer></script>
+#}}
+
+<div class="simple-likes"
+     data-simple-likes
+     data-entry-id="{{ entry_id }}"
+     data-liked="{{ user_has_liked ? 'true' : 'false' }}"
+     data-count="{{ likes_count }}"
+     data-can-interact="{{ can_interact ? 'true' : 'false' }}"
+     data-is-locked="{{ is_locked ? 'true' : 'false' }}"
+     data-is-authenticated="{{ is_authenticated ? 'true' : 'false' }}"
+     data-allow-guest-likes="{{ allow_guest_likes ? 'true' : 'false' }}">
+
+    {{ if can_interact && !is_locked }}
+        {{# Interactive like button #}}
+        <button class="simple-likes-btn"
+                style="display: flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer;">
+            <svg class="simple-likes-heart"
+                 fill="{{ user_has_liked ? 'currentColor' : 'none' }}"
+                 style="width: 24px; height: 24px; color: #ef4444; transition: fill 0.2s;"
+                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+            </svg>
+            <span class="simple-likes-count"
+                  style="font-weight: 500; color: {{ user_has_liked ? '#ef4444' : '#6b7280' }};">{{ likes_count }}</span>
+        </button>
+    {{ else }}
+        {{# Non-interactive display (locked or no permission) #}}
+        <div style="display: flex; align-items: center; gap: 4px;"
+             title="{{ is_locked ? 'Likes are closed' : (!is_authenticated && !allow_guest_likes ? 'Log in to like' : '') }}">
+            <svg class="simple-likes-heart"
+                 style="width: 24px; height: 24px; color: #6b7280;"
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="{{ is_locked ? '#6b7280' : 'none' }}"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+            </svg>
+            <span class="simple-likes-count" style="font-weight: 500; color: #6b7280;">{{ likes_count }}</span>
+        </div>
+    {{ /if }}
+
+    {{# Error message container #}}
+    <div class="simple-likes-error" style="display: none; font-size: 0.875rem; margin-top: 0.5rem;"></div>
+</div>
+
+<style>
+.simple-likes-error--error { color: #dc2626; }
+.simple-likes-error--warning { color: #ca8a04; }
+</style>

@@ -1,0 +1,7 @@
+{
+  "resources/js/simple-likes-fieldtype.js": {
+    "file": "simple-likes-fieldtype.js",
+    "isEntry": true,
+    "src": "resources/js/simple-likes-fieldtype.js"
+  }
+}

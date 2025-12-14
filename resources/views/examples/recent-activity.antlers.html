@@ -1,0 +1,38 @@
+{{# Recent activity feed - API version for cached sites #}}
+{{# Uses Alpine.js to fetch from /!/simple-likes/activity #}}
+
+<div class="bg-white rounded-lg shadow p-6" x-data="{ activity: [], loading: true }" x-init="
+    fetch('/!/simple-likes/activity?limit=8&hours=24')
+        .then(r => r.json())
+        .then(data => { activity = data; loading = false; })
+        .catch(() => { loading = false; })
+">
+    <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+
+    <template x-if="loading">
+        <div class="text-center text-gray-500 py-4">Loading...</div>
+    </template>
+
+    <template x-if="!loading && activity.length === 0">
+        <div class="text-center text-gray-500 py-4">No recent activity.</div>
+    </template>
+
+    <template x-if="!loading && activity.length > 0">
+        <div class="space-y-2">
+            <template x-for="item in activity" :key="item.created_at">
+                <div class="flex items-center space-x-3 py-2">
+                    <div class="w-2 h-2 rounded-full" :class="item.user_type === 'guest' ? 'bg-amber-500' : 'bg-green-500'"></div>
+                    <div class="flex-1">
+                        <template x-if="item.entry_url">
+                            <a :href="item.entry_url" class="text-sm font-medium text-gray-900 hover:text-blue-600" x-text="item.entry_title"></a>
+                        </template>
+                        <template x-if="!item.entry_url">
+                            <span class="text-sm font-medium text-gray-900" x-text="item.entry_title"></span>
+                        </template>
+                    </div>
+                    <div class="text-xs text-gray-500" x-text="item.time_ago"></div>
+                </div>
+            </template>
+        </div>
+    </template>
+</div>

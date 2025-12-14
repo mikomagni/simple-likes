@@ -1,0 +1,57 @@
+{
+    "name": "mikomagni/simple-likes",
+    "description": "Simple Likes is a lightweight addon for Statamic that lets visitors like, save, or favourite your content.",
+    "keywords": [
+        "statamic",
+        "simple likes",
+        "statistics",
+        "likes",
+        "favorites",
+        "favourites",
+        "bookmarks",
+        "reactions",
+        "engagement",
+        "social",
+        "cms",
+        "addon",
+        "laravel"
+    ],
+    "homepage": "https://simplelikes.com",
+    "type": "statamic-addon",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Mikomagni",
+            "homepage": "https://graffio.co"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "statamic/cms": "^5.0",
+        "laravel/framework": "^11.0 || ^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mikomagni\\SimpleLikes\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Simple Likes",
+            "slug": "simple-likes",
+            "description": "Simple Likes is a lightweight addon for Statamic that lets visitors like, save, or favourite your content.",
+            "developer": "MikoMagni",
+            "developer_url": "https://graffio.co"
+        },
+        "laravel": {
+            "providers": [
+                "Mikomagni\\SimpleLikes\\ServiceProvider"
+            ]
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+}

@@ -1,0 +1,104 @@
+{{# Simple Likes Button Template #}}
+{{# Uses the simpleLikes Alpine.js component for optimized performance #}}
+{{# Static cache compatible - fetches real status via API on init #}}
+
+{{#
+    REQUIRED: The simpleLikes Alpine.js component must be defined in your site.js.
+    See resources/js/site.js for the full implementation with:
+    - Static cache compatibility (hydrates on init)
+    - Automatic CSRF token refresh on 419 errors
+    - Optimistic UI updates with rollback on error
+    - Rate limit handling
+    - Smooth animations
+#}}
+
+<div class="simple-likes"
+     x-data="{
+        ...simpleLikes({
+            entryId: '{{ entry_id }}',
+            count: {{ likes_count }},
+            canInteract: {{ can_interact ? 'true' : 'false' }},
+            isLocked: {{ is_locked ? 'true' : 'false' }},
+            isAuthenticated: {{ is_authenticated ? 'true' : 'false' }},
+            allowGuestLikes: {{ allow_guest_likes ? 'true' : 'false' }}
+        }),
+        popping: false,
+        async handleLike() {
+            // Animate on both like and unlike
+            this.popping = true;
+            setTimeout(() => this.popping = false, 200);
+            this.toggleLike();
+        }
+     }">
+
+    {{# Loading state - shown while hydrating #}}
+    <template x-if="!hydrated">
+        <div style="display: flex; align-items: center; gap: 4px; opacity: 0.5;">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24" height="24" viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.5"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 style="color: #9ca3af;">
+                <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+            </svg>
+            <span style="color: #9ca3af;" x-text="count"></span>
+        </div>
+    </template>
+
+    {{# Interactive like button - shown when hydrated and user can interact #}}
+    <template x-if="hydrated && canInteract && !isLocked">
+        <button @click="handleLike()"
+                :disabled="loading"
+                :style="{ opacity: loading ? '0.7' : '1' }"
+                style="display: flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer;">
+
+            {{# Heart icon - fill changes based on liked state #}}
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24" height="24" viewBox="0 0 24 24"
+                 :fill="liked ? 'currentColor' : 'none'"
+                 stroke="currentColor"
+                 stroke-width="1.5"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 :style="{
+                     color: '#ef4444',
+                     transition: 'transform 0.15s ease-out',
+                     transform: popping ? 'scale(1.2)' : 'scale(1)'
+                 }">
+                <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+            </svg>
+
+            {{# Like count - color changes based on liked state #}}
+            <span :style="{ color: liked ? '#ef4444' : 'inherit' }"
+                  x-text="count"></span>
+        </button>
+    </template>
+
+    {{# Non-interactive display - shown when hydrated but locked or no permission #}}
+    <template x-if="hydrated && (!canInteract || isLocked)">
+        <div style="display: flex; align-items: center; gap: 4px; cursor: default;"
+             :title="isLocked ? 'Likes are closed' : (!isAuthenticated && !allowGuestLikes ? 'Log in to like' : '')">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24" height="24" viewBox="0 0 24 24"
+                 fill="currentColor"
+                 stroke="currentColor"
+                 stroke-width="1.5"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 style="color: #6b7280;">
+                <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+            </svg>
+            <span style="color: #6b7280;" x-text="count"></span>
+        </div>
+    </template>
+
+    {{# Error message - shown when there's an error #}}
+    <template x-if="errorMessage">
+        <div style="font-size: 0.875rem; margin-top: 0.5rem;"
+             :style="{ color: errorType === 'warning' ? '#ca8a04' : '#dc2626' }"
+             x-text="errorMessage"></div>
+    </template>
+</div>

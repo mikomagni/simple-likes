@@ -1,0 +1,52 @@
+{{# Simple inline counters - API version for cached sites #}}
+{{# Uses Alpine.js to fetch from /!/simple-likes/global-stats and /!/simple-likes/status #}}
+
+{{# Total site likes - fetches from global-stats #}}
+<span class="text-sm text-gray-600" x-data="{ count: '...' }" x-init="
+    fetch('/!/simple-likes/global-stats')
+        .then(r => r.json())
+        .then(data => { count = data.total_likes?.toLocaleString() || '0' })
+">
+    <span x-text="count"></span> total likes across the site
+</span>
+
+{{# Likes for current entry - fetches from status endpoint #}}
+{{# Replace 'your-entry-id' with the actual entry ID #}}
+<span class="text-sm text-gray-600" x-data="{ count: '...' }" x-init="
+    fetch('/!/simple-likes/status?ids={{ id }}')
+        .then(r => r.json())
+        .then(data => { count = data['{{ id }}']?.count || 0 })
+">
+    This post has <span x-text="count"></span> likes
+</span>
+
+{{# Collection count - using stats-all with collections parameter #}}
+<span class="text-sm text-gray-600" x-data="{ count: '...' }" x-init="
+    fetch('/!/simple-likes/stats-all?collections=blog')
+        .then(r => r.json())
+        .then(data => { count = data.collections?.blog?.toLocaleString() || '0' })
+">
+    <span x-text="count"></span> likes on blog posts
+</span>
+
+{{# Multiple entries in a loop - batch fetch all IDs #}}
+{{# This example shows how to fetch counts for multiple entries efficiently #}}
+<div x-data="{
+    counts: {},
+    async init() {
+        const ids = [...document.querySelectorAll('[data-entry-count]')].map(el => el.dataset.entryId);
+        if (ids.length === 0) return;
+        const response = await fetch('/!/simple-likes/status?ids=' + ids.join(','));
+        const data = await response.json();
+        this.counts = Object.fromEntries(Object.entries(data).map(([id, v]) => [id, v.count]));
+    }
+}">
+    {{ collection:blog limit="5" }}
+    <article class="mb-4">
+        <h3><a href="{{ url }}">{{ title }}</a></h3>
+        <div class="text-sm text-gray-500" data-entry-count data-entry-id="{{ id }}">
+            <span x-text="counts['{{ id }}'] ?? '...'"></span> likes
+        </div>
+    </article>
+    {{ /collection:blog }}
+</div>

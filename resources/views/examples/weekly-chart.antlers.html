@@ -1,0 +1,36 @@
+{{# Weekly activity chart - API version for cached sites #}}
+{{# Uses Alpine.js to fetch from /!/simple-likes/weekly #}}
+
+<div class="bg-white rounded-lg shadow p-6" x-data="{ days: [], loading: true }" x-init="
+    fetch('/!/simple-likes/weekly?days=7')
+        .then(r => r.json())
+        .then(data => { days = data; loading = false; })
+        .catch(() => { loading = false; })
+">
+    <h3 class="text-lg font-semibold mb-4">Weekly Activity</h3>
+
+    <template x-if="loading">
+        <div class="text-center text-gray-500 py-4">Loading...</div>
+    </template>
+
+    <template x-if="!loading && days.length === 0">
+        <div class="text-center text-gray-500 py-4">No activity this week.</div>
+    </template>
+
+    <template x-if="!loading && days.length > 0">
+        <div class="space-y-2">
+            <template x-for="day in days" :key="day.full_date">
+                <div class="flex items-center">
+                    <div class="w-12 text-xs text-gray-600 font-medium" x-text="day.date"></div>
+                    <div class="flex-1 mx-3">
+                        <div class="bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                 :style="'width: ' + day.percentage + '%'"></div>
+                        </div>
+                    </div>
+                    <div class="w-8 text-right text-xs font-medium text-gray-700" x-text="day.likes_count"></div>
+                </div>
+            </template>
+        </div>
+    </template>
+</div>

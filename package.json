@@ -1,0 +1,25 @@
+{
+  "name": "simple-likes",
+  "private": true,
+  "description": "Simple Likes is a lightweight addon for Statamic that lets visitors like, save, or favourite your content.",
+  "homepage": "https://simplelikes.com",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "watch": "vite build --watch"
+  },
+  "keywords": [
+    "statamic",
+    "likes",
+    "favorites",
+    "bookmarks"
+  ],
+  "author": "Miko Magni & Graffio <support@simplelikes.com> (https://simplelikes.com)",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^2.2.0",
+    "laravel-vite-plugin": "^0.8.0",
+    "vite": "^4.0.0",
+    "vue": "^2.7.0"
+  }
+}

@@ -1,0 +1,39 @@
+{{# Stats overview card - API version for cached sites #}}
+{{# Uses Alpine.js to fetch stats from /!/simple-likes/global-stats #}}
+
+<div class="p-6 bg-white rounded-lg shadow" x-data="{ stats: null, loading: true }" x-init="
+    fetch('/!/simple-likes/global-stats')
+        .then(r => r.json())
+        .then(data => { stats = data; loading = false; })
+        .catch(() => { loading = false; })
+">
+    <h3 class="mb-4 text-lg font-semibold">Site Engagement</h3>
+
+    <template x-if="loading">
+        <div class="text-center text-gray-500 py-4">Loading...</div>
+    </template>
+
+    <template x-if="!loading && stats">
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div class="text-center">
+                <div class="text-2xl font-bold text-blue-600" x-text="stats.total_likes?.toLocaleString() || '0'"></div>
+                <div class="text-sm text-gray-600">Total Likes</div>
+            </div>
+
+            <div class="text-center">
+                <div class="text-2xl font-bold text-green-600" x-text="stats.total_entries?.toLocaleString() || '0'"></div>
+                <div class="text-sm text-gray-600">Liked Posts</div>
+            </div>
+
+            <div class="text-center">
+                <div class="text-2xl font-bold text-purple-600" x-text="stats.today_likes?.toLocaleString() || '0'"></div>
+                <div class="text-sm text-gray-600">Today</div>
+            </div>
+
+            <div class="text-center">
+                <div class="text-2xl font-bold text-orange-600" x-text="stats.week_likes?.toLocaleString() || '0'"></div>
+                <div class="text-sm text-gray-600">This Week</div>
+            </div>
+        </div>
+    </template>
+</div>

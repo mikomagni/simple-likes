@@ -1,0 +1,57 @@
+{{# Simple Likes Button Template - Vanilla JS Version #}}
+{{# Uses the simpleLikes vanilla JavaScript for sites without Alpine.js #}}
+{{# The JS logic is defined once in simple-likes-vanilla.js, not repeated per button #}}
+
+{{#
+    REQUIRED: Add the vanilla JS to your site (once):
+
+    Option A: Import in your site.js
+    import '../vendor/simple-likes/js/simple-likes-vanilla.js';
+
+    Option B: Include via script tag
+    <script src="/vendor/simple-likes/js/simple-likes-vanilla.js"></script>
+#}}
+
+<div class="simple-likes"
+     data-simple-likes
+     data-entry-id="{{ entry_id }}"
+     data-liked="{{ user_has_liked ? 'true' : 'false' }}"
+     data-count="{{ likes_count }}"
+     data-can-interact="{{ can_interact ? 'true' : 'false' }}"
+     data-is-locked="{{ is_locked ? 'true' : 'false' }}">
+
+    {{ if can_interact && !is_locked }}
+        {{# Interactive like button #}}
+        <button class="simple-likes-btn"
+                style="display: flex; align-items: center; gap: 4px; background: none; border: none; cursor: pointer;">
+            <svg class="simple-likes-heart"
+                 fill="{{ user_has_liked ? 'currentColor' : 'none' }}"
+                 style="width: 24px; height: 24px; color: #ef4444; transition: fill 0.2s;"
+                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            <span class="simple-likes-count"
+                  style="font-weight: 500; color: {{ user_has_liked ? '#ef4444' : '#6b7280' }};">{{ likes_count }}</span>
+        </button>
+    {{ else }}
+        {{# Non-interactive display (locked or no permission) #}}
+        <div style="display: flex; align-items: center; gap: 4px;">
+            <svg class="simple-likes-heart"
+                 style="width: 24px; height: 24px; color: #6b7280;"
+                 xmlns="http://www.w3.org/2000/svg"
+                 fill="{{ is_locked ? '#6b7280' : 'none' }}"
+                 viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+            <span class="simple-likes-count" style="font-weight: 500; color: #6b7280;">{{ likes_count }}</span>
+        </div>
+    {{ /if }}
+
+    {{# Error message container #}}
+    <div class="simple-likes-error" style="display: none; font-size: 0.875rem; margin-top: 0.5rem;"></div>
+</div>
+
+<style>
+.simple-likes-error--error { color: #dc2626; }
+.simple-likes-error--warning { color: #ca8a04; }
+</style>
