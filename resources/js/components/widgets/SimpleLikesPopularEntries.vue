@@ -33,10 +33,13 @@ defineProps({
                 <tbody>
                     <tr v-for="(entry, index) in entries" :key="index">
                         <td>
-                            <a v-if="entry.cp_url" :href="entry.cp_url">
-                                {{ entry.title }}
-                            </a>
-                            <span v-else>{{ entry.title }}</span>
+                            <div class="sl-flex sl-items-center sl-gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="sl-icon sl-hide-mobile"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+                                <a v-if="entry.cp_url" :href="entry.cp_url">
+                                    {{ entry.title }}
+                                </a>
+                                <span v-else>{{ entry.title }}</span>
+                            </div>
                         </td>
                         <td class="sl-color-gray sl-hide-mobile">
                             {{ entry.collection }}
