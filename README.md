@@ -12,6 +12,16 @@
 
 <!-- /statamic:hide -->
 
+> **Statamic 6 Beta**
+>
+> This branch (`6.x`) is a beta release for Statamic 6 compatibility. To install:
+>
+> ```bash
+> composer require mikomagni/simple-likes:6.x-dev
+> ```
+>
+> For Statamic 5, use the `main` branch or a stable `1.x` release.
+
 Simple Likes is a lightweight add-on that lets visitors like, save, or favourite your content. Use it for wishlists, bookmarks, shortlists, whatever fits your project. Fully customisable icons and styling. Includes analytics tags and dashboard widgets to track engagement.
 
 [**Visit the documentation**](https://simplelikes.com) to learn more about getting started with Simple Likes.

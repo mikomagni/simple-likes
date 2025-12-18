@@ -2,6 +2,21 @@
 
 All notable changes to Simple Likes will be documented in this file.
 
+## v6.0.0-beta.1 - 18/12/2025
+
+### Changed
+
+- Statamic 6 compatibility
+- Migrated all widgets from Blade views to Vue 3 components
+- Migrated fieldtype to Vue 3 Composition API
+- Simplified Vite build configuration
+- Updated minimum requirement to `statamic/cms: ^6.0`
+
+### Added
+
+- Mobile responsive widget layouts
+- Gravatar support with automatic fallback to initials
+
 ## v1.0.0 - 14/12/2025
 
 ### Added
