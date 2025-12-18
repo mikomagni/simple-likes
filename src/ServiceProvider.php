@@ -50,7 +50,7 @@ class ServiceProvider extends AddonServiceProvider
             'resources/js/simple-likes-fieldtype.js'
         ],
         'publicDirectory' => 'resources/dist',
-        'buildDirectory' => 'build'
+        'buildDirectory' => 'build',
     ];
 
     protected function bootAddonStyles()
@@ -80,7 +80,7 @@ class ServiceProvider extends AddonServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../resources/dist/build' => public_path('vendor/simple-likes/build'),
+                __DIR__.'/../resources/dist' => public_path('vendor/simple-likes'),
             ], 'simple-likes-assets');
 
             $this->publishes([

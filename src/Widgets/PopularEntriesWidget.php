@@ -3,6 +3,7 @@
 namespace Mikomagni\SimpleLikes\Widgets;
 
 use Illuminate\Support\Facades\Cache;
+use Statamic\Widgets\VueComponent;
 use Statamic\Widgets\Widget;
 use Illuminate\Support\Facades\DB;
 use Mikomagni\SimpleLikes\Models\SimpleLike;
@@ -11,11 +12,11 @@ use Statamic\Facades\Entry;
 class PopularEntriesWidget extends Widget
 {
     /**
-     * The HTML that should be shown in the widget
+     * Return the Vue component to render
      *
-     * @return string|\Illuminate\View\View
+     * @return \Statamic\Widgets\VueComponent|null
      */
-    public function html()
+    public function component()
     {
         $config = config('simple-likes.widget', []);
         $limit = $config['popular_entries_limit'] ?? 5;
@@ -29,11 +30,13 @@ class PopularEntriesWidget extends Widget
         });
 
         // Only show if there's data
-        if ($popularEntries->count() > 0) {
-            return view('simple-likes::widgets.popular-entries', compact('popularEntries'));
+        if ($popularEntries->count() === 0) {
+            return null;
         }
 
-        return '';
+        return VueComponent::render('SimpleLikesPopularEntries', [
+            'entries' => $popularEntries->toArray(),
+        ]);
     }
 
     /**

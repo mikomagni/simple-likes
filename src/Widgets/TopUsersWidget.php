@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Mikomagni\SimpleLikes\Models\SimpleLike;
 use Mikomagni\SimpleLikes\Traits\ResolvesUsers;
+use Statamic\Widgets\VueComponent;
 use Statamic\Widgets\Widget;
 
 class TopUsersWidget extends Widget
@@ -13,11 +14,11 @@ class TopUsersWidget extends Widget
     use ResolvesUsers;
 
     /**
-     * The HTML that should be shown in the widget
+     * Return the Vue component to render
      *
-     * @return string|\Illuminate\View\View
+     * @return \Statamic\Widgets\VueComponent|null
      */
-    public function html()
+    public function component()
     {
         $config = config('simple-likes.widget', []);
         $limit = $config['top_users_limit'] ?? 5;
@@ -30,11 +31,13 @@ class TopUsersWidget extends Widget
         });
 
         // Only show if there's data
-        if ($topUsers->count() > 0) {
-            return view('simple-likes::widgets.top-users', compact('topUsers'));
+        if ($topUsers->count() === 0) {
+            return null;
         }
 
-        return '';
+        return VueComponent::render('SimpleLikesTopUsers', [
+            'users' => $topUsers->toArray(),
+        ]);
     }
 
     /**
@@ -62,7 +65,7 @@ class TopUsersWidget extends Widget
                     'name' => $user ? $this->getUserDisplayName($user) : "User #{$item->user_id}",
                     'likes_given' => $item->likes_given,
                     'avatar_url' => $user ? $this->getUserAvatarUrl($user) : null,
-                    'avatar_initial' => $user ? strtoupper(substr($this->getUserDisplayName($user), 0, 1)) : 'U',
+                    'avatar_initial' => $user ? $this->getUserAvatarInitial($user) : 'U',
                     'can_view_users' => $canViewUsers,
                     'edit_url' => $user && $canViewUsers ? "/cp/users/{$item->user_id}/edit" : null,
                 ];

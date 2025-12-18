@@ -1,7 +1,11 @@
 {
   "resources/js/simple-likes-fieldtype.js": {
-    "file": "simple-likes-fieldtype.js",
+    "file": "assets/simple-likes-fieldtype-JYyCBh87.js",
+    "name": "simple-likes-fieldtype",
+    "src": "resources/js/simple-likes-fieldtype.js",
     "isEntry": true,
-    "src": "resources/js/simple-likes-fieldtype.js"
+    "css": [
+      "assets/simple-likes-fieldtype-BeDdnde0.css"
+    ]
   }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Cache;
 use Mikomagni\SimpleLikes\Models\SimpleLike;
 use Mikomagni\SimpleLikes\Traits\ResolvesUsers;
 use Statamic\Facades\Entry;
+use Statamic\Widgets\VueComponent;
 use Statamic\Widgets\Widget;
 
 class RecentActivityWidget extends Widget
@@ -13,11 +14,11 @@ class RecentActivityWidget extends Widget
     use ResolvesUsers;
 
     /**
-     * The HTML that should be shown in the widget
+     * Return the Vue component to render
      *
-     * @return string|\Illuminate\View\View
+     * @return \Statamic\Widgets\VueComponent|null
      */
-    public function html()
+    public function component()
     {
         $config = config('simple-likes.widget', []);
         $limit = $config['recent_activity_limit'] ?? 5;
@@ -30,12 +31,16 @@ class RecentActivityWidget extends Widget
         });
 
         // Only show if there's data
-        if ($recentActivity->count() > 0) {
-            $overview = $this->getOverviewData();
-            return view('simple-likes::widgets.recent-activity', compact('recentActivity', 'overview'));
+        if ($recentActivity->count() === 0) {
+            return null;
         }
 
-        return '';
+        $overview = $this->getOverviewData();
+
+        return VueComponent::render('SimpleLikesRecentActivity', [
+            'activities' => $recentActivity->toArray(),
+            'totalCount' => $overview['recent_activity'],
+        ]);
     }
 
     /**
@@ -73,9 +78,9 @@ class RecentActivityWidget extends Widget
                     'user_type' => $like->user_type,
                     'user_name' => $userName,
                     'user_edit_url' => $user && $like->user_type === 'authenticated' ? $this->getUserEditUrl($like->user_id) : null,
-                    'created_at' => $like->created_at,
+                    'created_at' => $like->created_at->toIso8601String(),
                     'avatar_url' => $user ? $this->getUserAvatarUrl($user) : null,
-                    'avatar_initial' => $user ? strtoupper(substr($this->getUserDisplayName($user), 0, 1)) : 'G',
+                    'avatar_initial' => $user ? $this->getUserAvatarInitial($user) : 'G',
                 ];
             })
             ->filter(fn($item) => $item['entry_title'] !== 'Unknown Entry');

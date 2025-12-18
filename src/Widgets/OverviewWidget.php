@@ -3,6 +3,7 @@
 namespace Mikomagni\SimpleLikes\Widgets;
 
 use Illuminate\Support\Facades\Cache;
+use Statamic\Widgets\VueComponent;
 use Statamic\Widgets\Widget;
 use Mikomagni\SimpleLikes\Models\SimpleLike;
 use Statamic\Facades\Entry;
@@ -10,11 +11,11 @@ use Statamic\Facades\Entry;
 class OverviewWidget extends Widget
 {
     /**
-     * The HTML that should be shown in the widget
+     * Return the Vue component to render
      *
-     * @return string|\Illuminate\View\View
+     * @return \Statamic\Widgets\VueComponent
      */
-    public function html()
+    public function component()
     {
         // Cache widget data to reduce CP load
         $cacheTtl = config('simple-likes.cache.widget_overview_ttl', 300);
@@ -22,7 +23,9 @@ class OverviewWidget extends Widget
             return $this->getOverview();
         });
 
-        return view('simple-likes::widgets.overview', compact('overview'));
+        return VueComponent::render('SimpleLikesOverview', [
+            'overview' => $overview,
+        ]);
     }
 
     /**

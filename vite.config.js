@@ -1,32 +1,23 @@
-import { defineConfig } from 'vite'
-import vue2 from '@vitejs/plugin-vue2'
-import laravel from 'laravel-vite-plugin'
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: [
-                'resources/js/simple-likes-fieldtype.js'
-            ],
+            input: ['resources/js/simple-likes-fieldtype.js'],
             publicDirectory: 'resources/dist',
-            buildDirectory: 'build'
         }),
-        vue2()
+        vue(),
     ],
     build: {
-        manifest: true,
-        outDir: 'resources/dist/build',
         rollupOptions: {
-            external: ['vue', 'Statamic'],
+            external: ['vue'],
             output: {
-                entryFileNames: '[name].js',
-                chunkFileNames: '[name].js',
-                assetFileNames: '[name][extname]',
                 globals: {
-                    vue: 'Vue',
-                    Statamic: 'Statamic'
+                    vue: 'Vue'
                 }
             }
         }
     }
-})
+});
