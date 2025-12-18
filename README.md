@@ -49,6 +49,14 @@ This addon is **paid software**. You may use it for free during development, but
 
 If you purchased Simple Likes before Statamic 6, a free upgrade will be provided to ensure compatibility with the new version.
 
+A beta version for Statamic 6 is now available. To install:
+
+```bash
+composer require mikomagni/simple-likes:6.x-dev
+```
+
+See the [6.x branch](https://github.com/mikomagni/simple-likes/tree/6.x) for details.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.

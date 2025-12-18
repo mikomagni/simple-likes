@@ -2,6 +2,12 @@
 
 All notable changes to Simple Likes will be documented in this file.
 
+## v1.0.1 - 18/12/2025
+
+### Added
+
+- Documentation for Statamic 6 beta installation
+
 ## v1.0.0 - 14/12/2025
 
 ### Added
