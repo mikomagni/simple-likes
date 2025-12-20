@@ -39,7 +39,7 @@ Simple Likes is a lightweight add-on that lets visitors like, save, or favourite
 * Full static caching support with client-side hydration
 * Alpine.js and Vanilla JS versions included
 * Flexible database support (SQLite, MySQL, MariaDB, PostgreSQL)
-* Fully translatable with publishable language files (coming soon)
+* Fully translatable with publishable language files
 
 ## More than just likes
 
