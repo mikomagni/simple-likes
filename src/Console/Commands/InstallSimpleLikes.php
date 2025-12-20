@@ -101,6 +101,21 @@ class InstallSimpleLikes extends Command
             info('CSS published to public/vendor/simple-likes/css');
         }
 
+        if (confirm(
+            label: 'Would you like to publish the language files?',
+            default: false,
+            hint: 'Allows customising or translating Control Panel strings.'
+        )) {
+            spin(
+                callback: fn () => $this->callSilent('vendor:publish', [
+                    '--tag' => 'simple-likes-lang',
+                    '--force' => $this->option('force'),
+                ]),
+                message: 'Publishing language files...'
+            );
+            info('Language files published to resources/lang/vendor/simple-likes');
+        }
+
         $this->newLine();
         outro('Simple Likes installed successfully!');
 

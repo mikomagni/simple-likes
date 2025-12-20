@@ -12,22 +12,22 @@ defineProps({
 <template>
     <div class="simple-likes-widget three-columns">
         <div class="sl-flex sl-items-center sl-mb-2">
-            <h3 class="sl-title" style="margin-bottom: 0">Popular Entries
+            <h3 class="sl-title" style="margin-bottom: 0">{{ __('simple-likes::messages.popular_entries_title') }}
                 <span class="sl-text-xs sl-color-gray sl-hide-mobile">
-                (<span class="sl-color-orange">Boosts</span> | <span class="sl-color-blue">Members</span> | <span class="sl-color-purple">Anonymous</span>)
+                (<span class="sl-color-orange">{{ __('simple-likes::messages.boosts') }}</span> | <span class="sl-color-blue">{{ __('simple-likes::messages.members') }}</span> | <span class="sl-color-purple">{{ __('simple-likes::messages.anonymous') }}</span>)
                 </span>
             </h3>
         </div>
         <Panel>
             <div v-if="!entries.length" class="sl-empty">
-                No entries with likes yet
+                {{ __('simple-likes::messages.no_entries_with_likes') }}
             </div>
             <table v-else class="data-table" data-table>
                 <thead>
                     <tr>
-                        <th>Entry</th>
-                        <th class="sl-hide-mobile">Collection</th>
-                        <th>Likes</th>
+                        <th>{{ __('simple-likes::messages.entry') }}</th>
+                        <th class="sl-hide-mobile">{{ __('simple-likes::messages.collection') }}</th>
+                        <th>{{ __('simple-likes::messages.likes') }}</th>
                     </tr>
                 </thead>
                 <tbody>

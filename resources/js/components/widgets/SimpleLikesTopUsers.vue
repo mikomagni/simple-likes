@@ -11,16 +11,16 @@ defineProps({
 
 <template>
     <div class="simple-likes-widget">
-        <h3 class="sl-title">Top Users</h3>
+        <h3 class="sl-title">{{ __('simple-likes::messages.top_users_title') }}</h3>
         <Panel>
             <div v-if="!users.length" class="sl-empty">
-                No user activity yet
+                {{ __('simple-likes::messages.no_user_activity') }}
             </div>
             <table v-else class="data-table" data-table>
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Likes</th>
+                        <th>{{ __('simple-likes::messages.user') }}</th>
+                        <th>{{ __('simple-likes::messages.likes') }}</th>
                     </tr>
                 </thead>
                 <tbody>

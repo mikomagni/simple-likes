@@ -2,6 +2,15 @@
 
 All notable changes to Simple Likes will be documented in this file.
 
+## v6.0.0-beta.2 - 20/12/2025
+
+### Added
+
+- Control Panel translation support for all widgets and fieldtype
+- English language file (`resources/lang/en/messages.php`)
+- Publishable language files for community translations
+- Language publishing option in install command (`php please simple-likes:install`)
+
 ## v6.0.0-beta.1 - 18/12/2025
 
 ### Changed

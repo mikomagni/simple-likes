@@ -18,7 +18,7 @@ function formatTimeAgo(dateString) {
     const now = new Date();
     const seconds = Math.floor((now - date) / 1000);
 
-    if (seconds < 60) return 'now';
+    if (seconds < 60) return __('simple-likes::messages.now');
     if (seconds < 3600) return Math.floor(seconds / 60) + 'm';
     if (seconds < 86400) return Math.floor(seconds / 3600) + 'h';
     return Math.floor(seconds / 86400) + 'd';
@@ -27,17 +27,17 @@ function formatTimeAgo(dateString) {
 
 <template>
     <div class="simple-likes-widget three-columns">
-        <h3 class="sl-title">Recent Activity ({{ totalCount }} today)</h3>
+        <h3 class="sl-title">{{ __('simple-likes::messages.recent_activity_title') }} ({{ totalCount }} {{ __('simple-likes::messages.today').toLowerCase() }})</h3>
         <Panel>
             <div v-if="!activities.length" class="sl-empty">
-                No activity in the last 24 hours
+                {{ __('simple-likes::messages.no_activity') }}
             </div>
             <table v-else class="data-table" data-table>
                 <thead>
                     <tr>
-                        <th>Entry</th>
-                        <th>User</th>
-                        <th>When</th>
+                        <th>{{ __('simple-likes::messages.entry') }}</th>
+                        <th>{{ __('simple-likes::messages.user') }}</th>
+                        <th>{{ __('simple-likes::messages.when') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,7 +46,7 @@ function formatTimeAgo(dateString) {
                             <div class="sl-flex sl-items-center sl-gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="sl-icon sl-hide-mobile"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
                                 <a v-if="activity.entry_cp_url" :href="activity.entry_cp_url">{{ activity.entry_title }}</a>
-                                <span v-else>{{ activity.entry_title || 'Unknown' }}</span>
+                                <span v-else>{{ activity.entry_title || __('simple-likes::messages.unknown') }}</span>
                             </div>
                         </td>
                         <td>
@@ -79,12 +79,12 @@ function formatTimeAgo(dateString) {
                                         <circle cx="8" cy="11" r="1"/>
                                         <circle cx="16" cy="11" r="1"/>
                                     </svg>
-                                    <span class="sl-color-gray sl-hide-mobile">Guest</span>
+                                    <span class="sl-color-gray sl-hide-mobile">{{ __('simple-likes::messages.guest') }}</span>
                                 </template>
                             </div>
                         </td>
                         <td class="sl-color-gray">
-                            <span class="pe-2">{{ formatTimeAgo(activity.created_at) }}<span class="sl-hide-mobile"> ago</span></span>
+                            <span class="pe-2">{{ formatTimeAgo(activity.created_at) }}<span class="sl-hide-mobile"> {{ __('simple-likes::messages.ago') }}</span></span>
                         </td>
                     </tr>
                 </tbody>
