@@ -2,6 +2,19 @@
 
 All notable changes to Simple Likes will be documented in this file.
 
+## v6.0.0-beta.3 - 22/12/2025
+
+### Added
+
+- Sortable table columns in Recent Activity, Popular Entries, and Top Users widgets
+- Sort by Entry, User, or When in Recent Activity
+- Sort by Entry, Collection, or Likes in Popular Entries
+- Sort by User or Likes in Top Users
+
+### Changed
+
+- Table headers now use Statamic's native Button component with ghost variant for consistent CP styling
+
 ## v6.0.0-beta.2 - 20/12/2025
 
 ### Added

@@ -16,7 +16,7 @@ defineProps({
             <table class="data-table" data-table>
                 <thead>
                     <tr>
-                        <th>{{ __('simple-likes::messages.metric') }}</th>
+                        <th><span class="sl-ml-1-mobile">{{ __('simple-likes::messages.metric') }}</span></th>
                         <th>{{ __('simple-likes::messages.count') }}</th>
                     </tr>
                 </thead>

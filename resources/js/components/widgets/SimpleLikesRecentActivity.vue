@@ -1,7 +1,8 @@
 <script setup>
-import { Panel } from '@statamic/cms/ui';
+import { ref, computed } from 'vue';
+import { Panel, Button } from '@statamic/cms/ui';
 
-defineProps({
+const props = defineProps({
     activities: {
         type: Array,
         required: true
@@ -11,6 +12,48 @@ defineProps({
         default: 0
     }
 });
+
+const sortField = ref('created_at');
+const sortDirection = ref('desc');
+
+const sortedActivities = computed(() => {
+    return [...props.activities].sort((a, b) => {
+        if (sortField.value === 'entry_title') {
+            const aVal = a.entry_title?.toLowerCase() ?? '';
+            const bVal = b.entry_title?.toLowerCase() ?? '';
+            return sortDirection.value === 'desc'
+                ? bVal.localeCompare(aVal)
+                : aVal.localeCompare(bVal);
+        }
+        if (sortField.value === 'user_name') {
+            const aVal = a.user_name?.toLowerCase() ?? 'zzz';
+            const bVal = b.user_name?.toLowerCase() ?? 'zzz';
+            return sortDirection.value === 'desc'
+                ? bVal.localeCompare(aVal)
+                : aVal.localeCompare(bVal);
+        }
+        if (sortField.value === 'created_at') {
+            const aVal = new Date(a.created_at || 0).getTime();
+            const bVal = new Date(b.created_at || 0).getTime();
+            return sortDirection.value === 'desc' ? bVal - aVal : aVal - bVal;
+        }
+        return 0;
+    });
+});
+
+function toggleSort(field) {
+    if (sortField.value === field) {
+        sortDirection.value = sortDirection.value === 'desc' ? 'asc' : 'desc';
+    } else {
+        sortField.value = field;
+        sortDirection.value = field === 'created_at' ? 'desc' : 'asc';
+    }
+}
+
+function getSortIcon(field) {
+    if (sortField.value !== field) return null;
+    return sortDirection.value === 'desc' ? 'sort-desc' : 'sort-asc';
+}
 
 function formatTimeAgo(dateString) {
     if (!dateString) return '';
@@ -35,13 +78,40 @@ function formatTimeAgo(dateString) {
             <table v-else class="data-table" data-table>
                 <thead>
                     <tr>
-                        <th>{{ __('simple-likes::messages.entry') }}</th>
-                        <th>{{ __('simple-likes::messages.user') }}</th>
-                        <th>{{ __('simple-likes::messages.when') }}</th>
+                        <th>
+                            <Button
+                                :text="__('simple-likes::messages.entry')"
+                                :icon-append="getSortIcon('entry_title')"
+                                size="sm"
+                                variant="ghost"
+                                class="-mt-2 -mb-1 -ms-3 text-sm! font-medium! text-gray-900! dark:text-gray-400! sl-ml-1-mobile"
+                                @click="toggleSort('entry_title')"
+                            />
+                        </th>
+                        <th>
+                            <Button
+                                :text="__('simple-likes::messages.user')"
+                                :icon-append="getSortIcon('user_name')"
+                                size="sm"
+                                variant="ghost"
+                                class="-mt-2 -mb-1 -ms-3 text-sm! font-medium! text-gray-900! dark:text-gray-400!"
+                                @click="toggleSort('user_name')"
+                            />
+                        </th>
+                        <th>
+                            <Button
+                                :text="__('simple-likes::messages.when')"
+                                :icon-append="getSortIcon('created_at')"
+                                size="sm"
+                                variant="ghost"
+                                class="-mt-2 -mb-1 -ms-3 text-sm! font-medium! text-gray-900! dark:text-gray-400!"
+                                @click="toggleSort('created_at')"
+                            />
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(activity, index) in activities" :key="index">
+                    <tr v-for="(activity, index) in sortedActivities" :key="index">
                         <td>
                             <div class="sl-flex sl-items-center sl-gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="sl-icon sl-hide-mobile"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>

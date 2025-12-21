@@ -1,12 +1,45 @@
 <script setup>
-import { Panel } from '@statamic/cms/ui';
+import { ref, computed } from 'vue';
+import { Panel, Button } from '@statamic/cms/ui';
 
-defineProps({
+const props = defineProps({
     users: {
         type: Array,
         required: true
     }
 });
+
+const sortField = ref('likes_given');
+const sortDirection = ref('desc');
+
+const sortedUsers = computed(() => {
+    return [...props.users].sort((a, b) => {
+        if (sortField.value === 'name') {
+            const aVal = a.name?.toLowerCase() ?? '';
+            const bVal = b.name?.toLowerCase() ?? '';
+            return sortDirection.value === 'desc'
+                ? bVal.localeCompare(aVal)
+                : aVal.localeCompare(bVal);
+        }
+        const aVal = a[sortField.value] ?? 0;
+        const bVal = b[sortField.value] ?? 0;
+        return sortDirection.value === 'desc' ? bVal - aVal : aVal - bVal;
+    });
+});
+
+function toggleSort(field) {
+    if (sortField.value === field) {
+        sortDirection.value = sortDirection.value === 'desc' ? 'asc' : 'desc';
+    } else {
+        sortField.value = field;
+        sortDirection.value = field === 'name' ? 'asc' : 'desc';
+    }
+}
+
+function getSortIcon(field) {
+    if (sortField.value !== field) return null;
+    return sortDirection.value === 'desc' ? 'sort-desc' : 'sort-asc';
+}
 </script>
 
 <template>
@@ -19,12 +52,30 @@ defineProps({
             <table v-else class="data-table" data-table>
                 <thead>
                     <tr>
-                        <th>{{ __('simple-likes::messages.user') }}</th>
-                        <th>{{ __('simple-likes::messages.likes') }}</th>
+                        <th>
+                            <Button
+                                :text="__('simple-likes::messages.user')"
+                                :icon-append="getSortIcon('name')"
+                                size="sm"
+                                variant="ghost"
+                                class="-mt-2 -mb-1 -ms-3 text-sm! font-medium! text-gray-900! dark:text-gray-400! sl-ml-1-mobile"
+                                @click="toggleSort('name')"
+                            />
+                        </th>
+                        <th>
+                            <Button
+                                :text="__('simple-likes::messages.likes')"
+                                :icon-append="getSortIcon('likes_given')"
+                                size="sm"
+                                variant="ghost"
+                                class="-mt-2 -mb-1 -ms-3 text-sm! font-medium! text-gray-900! dark:text-gray-400!"
+                                @click="toggleSort('likes_given')"
+                            />
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(user, index) in users" :key="index">
+                    <tr v-for="(user, index) in sortedUsers" :key="index">
                         <td>
                             <div class="sl-flex sl-items-center sl-gap-2">
                                 <a v-if="user.edit_url && user.can_view_users" :href="user.edit_url">

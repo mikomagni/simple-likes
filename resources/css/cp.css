@@ -80,6 +80,14 @@
     color: #6b7280;
 }
 
+/* Additional flex utilities */
+.sl-gap-1 { gap: 0.25rem; }
+
+/* Show only on mobile */
+.sl-show-mobile-only {
+    display: none !important;
+}
+
 /* Responsive - hide on mobile */
 @media (max-width: 640px) {
     .sl-hide-mobile {
@@ -87,5 +95,11 @@
     }
     .sl-pe-mobile {
         padding-right: 0.5rem;
+    }
+    .sl-show-mobile-only {
+        display: flex !important;
+    }
+    .sl-ml-1-mobile {
+        margin-left: 0.1rem;
     }
 }
