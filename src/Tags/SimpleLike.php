@@ -360,6 +360,70 @@ class SimpleLike extends Tags
         return $query->count();
     }
 
+    /** {{ simple_like:wishlist collection="news" limit="10" }} */
+    public function wishlist()
+    {
+        $userId = Auth::check()
+            ? Auth::user()->id()
+            : 'guest_' . hash('sha256', request()->ip() . '|' . request()->userAgent());
+
+        $collection = $this->params->get('collection');
+        $limit = $this->params->get('limit', 10);
+
+        $likes = SimpleLikeModel::forUser($userId)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $entryIds = $likes->pluck('entry_id')->unique()->toArray();
+        $allEntries = Entry::query()->whereIn('id', $entryIds)->get()->keyBy->id();
+
+        return $likes->map(function ($like) use ($collection, $allEntries) {
+            $entry = $allEntries->get($like->entry_id);
+
+            if (!$entry || ($collection && $entry->collectionHandle() !== $collection)) {
+                return null;
+            }
+
+            return [
+                'entry_id' => $entry->id(),
+                'title' => $entry->get('title'),
+                'url' => $entry->url(),
+                'collection' => $entry->collectionHandle(),
+                'liked_at' => $like->created_at,
+                'liked_ago' => $like->created_at->diffForHumans(),
+                'entry' => $entry,
+            ];
+        })
+        ->filter()
+        ->take($limit)
+        ->values();
+    }
+
+    /** {{ simple_like:wishlist_count collection="news" }} */
+    public function wishlistCount()
+    {
+        $userId = Auth::check()
+            ? Auth::user()->id()
+            : 'guest_' . hash('sha256', request()->ip() . '|' . request()->userAgent());
+
+        $collection = $this->params->get('collection');
+        $query = SimpleLikeModel::forUser($userId);
+
+        if ($collection) {
+            $entries = Entry::query()->where('collection', $collection)->get();
+            $entryIds = $entries->map(fn($entry) => $entry->id())->toArray();
+            return $query->whereIn('entry_id', $entryIds)->count();
+        }
+
+        return $query->count();
+    }
+
+    /** {{ simple_like:is_guest }} */
+    public function isGuest()
+    {
+        return !Auth::check();
+    }
+
     /** {{ simple_like:count id="xxx" collection="all" }} */
     public function count()
     {

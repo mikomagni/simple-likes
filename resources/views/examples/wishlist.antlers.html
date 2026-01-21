@@ -1,0 +1,121 @@
+{{#
+    Wishlist Example (Server-Rendered)
+    ----------------------------------
+    Displays the current user's liked entries (works for both guests and authenticated users).
+
+    Usage:
+    {{ partial:simple-likes::examples/wishlist }}
+    {{ partial:simple-likes::examples/wishlist limit="20" collection="products" }}
+#}}
+
+<div class="wishlist">
+    <div class="wishlist-header">
+        <h2>My Wishlist</h2>
+        <span class="wishlist-count">{{ simple_like:wishlist_count }} items</span>
+    </div>
+
+    {{ if {simple_like:is_guest} }}
+        <p class="wishlist-guest-notice">
+            You're browsing as a guest. <a href="/login">Log in</a> to save your wishlist permanently across devices.
+        </p>
+    {{ /if }}
+
+    {{ wishlist = {simple_like:wishlist limit="10"} }}
+    {{ if wishlist | is_empty }}
+        <p class="wishlist-empty">Your wishlist is empty. Start liking entries to add them here!</p>
+    {{ else }}
+        <ul class="wishlist-items">
+            {{ wishlist }}
+                <li class="wishlist-item">
+                    <a href="{{ url }}" class="wishlist-item-link">
+                        <span class="wishlist-item-title">{{ title }}</span>
+                        <span class="wishlist-item-collection">{{ collection }}</span>
+                    </a>
+                    <span class="wishlist-item-time">{{ liked_ago }}</span>
+                </li>
+            {{ /wishlist }}
+        </ul>
+    {{ /if }}
+</div>
+
+<style>
+    .wishlist {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    .wishlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .wishlist-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    .wishlist-count {
+        background: #f3f4f6;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+    .wishlist-guest-notice {
+        background: #fef3c7;
+        border: 1px solid #fcd34d;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        color: #92400e;
+    }
+    .wishlist-guest-notice a {
+        color: #d97706;
+        text-decoration: underline;
+    }
+    .wishlist-empty {
+        text-align: center;
+        padding: 2rem;
+        color: #9ca3af;
+    }
+    .wishlist-items {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .wishlist-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    .wishlist-item:last-child {
+        border-bottom: none;
+    }
+    .wishlist-item-link {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+    }
+    .wishlist-item-link:hover .wishlist-item-title {
+        color: #2563eb;
+    }
+    .wishlist-item-title {
+        font-weight: 500;
+        color: #111827;
+    }
+    .wishlist-item-collection {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        text-transform: capitalize;
+    }
+    .wishlist-item-time {
+        font-size: 0.75rem;
+        color: #9ca3af;
+    }
+</style>
