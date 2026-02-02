@@ -2,7 +2,9 @@
 
 All notable changes to Simple Likes will be documented in this file.
 
-## v6.0.0-beta.4 - 02/01/2026
+## v2.0.0 - 02/01/2026
+
+First stable release for Statamic 6.
 
 ### Added
 
@@ -11,30 +13,13 @@ All notable changes to Simple Likes will be documented in this file.
 - New API endpoint `/!/simple-likes/wishlist` for client-side wishlist fetching
 - Example wishlist partials (Alpine.js and server-side versions)
 - Guest likes cleanup command: `php please simple-likes:prune-guests --days=30 --dry-run`
-
-## v6.0.0-beta.3 - 22/12/2025
-
-### Added
-
 - Sortable table columns in Recent Activity, Popular Entries, and Top Users widgets
-- Sort by Entry, User, or When in Recent Activity
-- Sort by Entry, Collection, or Likes in Popular Entries
-- Sort by User or Likes in Top Users
-
-### Changed
-
-- Table headers now use Statamic's native Button component with ghost variant for consistent CP styling
-
-## v6.0.0-beta.2 - 20/12/2025
-
-### Added
-
 - Control Panel translation support for all widgets and fieldtype
 - English language file (`resources/lang/en/messages.php`)
 - Publishable language files for community translations
-- Language publishing option in install command (`php please simple-likes:install`)
-
-## v6.0.0-beta.1 - 18/12/2025
+- Language publishing option in install command
+- Mobile responsive widget layouts
+- Gravatar support with automatic fallback to initials
 
 ### Changed
 
@@ -42,12 +27,20 @@ All notable changes to Simple Likes will be documented in this file.
 - Migrated all widgets from Blade views to Vue 3 components
 - Migrated fieldtype to Vue 3 Composition API
 - Simplified Vite build configuration
-- Updated minimum requirement to `statamic/cms: ^6.0`
+- Updated minimum requirement to `statamic/cms: ^6.0`, `laravel/framework: ^11.0 || ^12.0`
+- Table headers now use Statamic's native Button component with ghost variant for consistent CP styling
+
+---
+
+## v1.0.2 - 02/01/2026
+
+Final release for Statamic 5. Future development continues on v2.x for Statamic 6.
+
+## v1.0.1 - 18/12/2025
 
 ### Added
 
-- Mobile responsive widget layouts
-- Gravatar support with automatic fallback to initials
+- Documentation updates
 
 ## v1.0.0 - 14/12/2025
 

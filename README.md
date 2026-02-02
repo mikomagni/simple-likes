@@ -12,16 +12,6 @@
 
 <!-- /statamic:hide -->
 
-> **Statamic 6 Beta**
->
-> This branch (`6.x`) is a beta release for Statamic 6 compatibility. To install:
->
-> ```bash
-> composer require mikomagni/simple-likes:6.x-dev
-> ```
->
-> For Statamic 5, use the `main` branch or a stable `1.x` release.
-
 Simple Likes is a lightweight add-on that lets visitors like, save, or favourite your content. Use it for wishlists, bookmarks, shortlists, whatever fits your project. Fully customisable icons and styling. Includes analytics tags and dashboard widgets to track engagement.
 
 [**Visit the documentation**](https://simplelikes.com) to learn more about getting started with Simple Likes.
@@ -31,8 +21,9 @@ Simple Likes is a lightweight add-on that lets visitors like, save, or favourite
 * Like buttons for any entry in any collection, with full control over which collections are enabled
 * Guest & authenticated user support with privacy-friendly IP hashing
 * Per-entry control to enable/disable guest likes or close likes entirely
+* Wishlist feature for guests and authenticated users with Antlers tags and API endpoint
 * Boost field to set a starting count for social proof
-* Antlers tags for popular content, recent activity, weekly trends, and top users
+* Antlers tags for popular content, recent activity, weekly trends, top users, and wishlists
 * Four dashboard widgets for at-a-glance engagement stats
 * Multi-layer spam protection with configurable rate limiting
 * Batched API requests to minimise database queries on pages with many like buttons
@@ -40,6 +31,7 @@ Simple Likes is a lightweight add-on that lets visitors like, save, or favourite
 * Alpine.js and Vanilla JS versions included
 * Flexible database support (SQLite, MySQL, MariaDB, PostgreSQL)
 * Fully translatable with publishable language files
+* Guest likes cleanup command to prevent database bloat
 
 ## More than just likes
 
@@ -55,9 +47,16 @@ While it's called "Simple Likes," the addon is flexible enough for many use case
 
 This addon is **paid software**. You may use it for free during development, but you must purchase a license from the [Statamic Marketplace](https://statamic.com/addons/graffio/simple-likes) before deploying to production. See [LICENSE.md](LICENSE.md) for full terms.
 
-### Statamic 6 Upgrade
+### Version Compatibility
 
-If you purchased Simple Likes before Statamic 6, a free upgrade will be provided to ensure compatibility with the new version.
+| Simple Likes | Statamic | PHP | Laravel |
+|-------------|----------|-----|---------|
+| v2.x | 6.x | ^8.2 | ^11.0 \|\| ^12.0 |
+| v1.x | 5.x | ^8.2 | ^11.0 |
+
+Composer will automatically install the correct version based on your Statamic version.
+
+If you purchased Simple Likes before Statamic 6, your license covers both versions.
 
 ## Changelog
 
