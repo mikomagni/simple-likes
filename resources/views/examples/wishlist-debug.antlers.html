@@ -1,0 +1,26 @@
+{{#
+    Wishlist Debug Template
+    -----------------------
+    Use this to debug wishlist issues.
+
+    Usage: {{ partial:simple-likes::examples/wishlist-debug }}
+#}}
+
+<div style="background: #f3f4f6; padding: 1rem; margin: 1rem 0; font-family: monospace; font-size: 0.875rem;">
+    <h3 style="margin: 0 0 1rem;">Wishlist Debug Info</h3>
+
+    <p><strong>Is Guest:</strong> {{ simple_like:is_guest }}</p>
+    <p><strong>Wishlist Count:</strong> {{ simple_like:wishlist_count }}</p>
+
+    <h4>Wishlist Items:</h4>
+    {{ wishlist = {simple_like:wishlist limit="10"} }}
+    {{ if wishlist | is_empty }}
+        <p>No items found for current user.</p>
+    {{ else }}
+        <ul>
+        {{ wishlist }}
+            <li>{{ entry_id }} - {{ title }} ({{ collection }}) - {{ liked_ago }}</li>
+        {{ /wishlist }}
+        </ul>
+    {{ /if }}
+</div>

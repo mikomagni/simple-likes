@@ -355,6 +355,60 @@ class SimpleLikesController extends Controller
     }
 
     /**
+     * GET /!/simple-likes/wishlist?limit=10&collection=news
+     */
+    public function wishlist(Request $request)
+    {
+        $limit = min((int) $request->get('limit', 10), 50);
+        $collection = $request->get('collection');
+        $userId = $this->getUserIdentifier($request);
+        $isAuthenticated = Auth::check();
+
+        $likes = SimpleLike::forUser($userId)
+            ->orderByDesc('created_at')
+            ->get();
+
+        $entryIds = $likes->pluck('entry_id')->unique()->toArray();
+
+        if (empty($entryIds)) {
+            return response()->json([
+                'items' => [],
+                'count' => 0,
+                'is_authenticated' => $isAuthenticated,
+            ]);
+        }
+
+        $entries = Entry::query()->whereIn('id', $entryIds)->get()->keyBy->id();
+
+        $items = $likes->map(function ($like) use ($entries, $collection) {
+            $entry = $entries->get($like->entry_id);
+
+            if (!$entry || ($collection && $entry->collectionHandle() !== $collection)) {
+                return null;
+            }
+
+            return [
+                'entry_id' => $entry->id(),
+                'title' => $entry->get('title'),
+                'url' => $entry->url(),
+                'collection' => $entry->collectionHandle(),
+                'liked_at' => $like->created_at->toIso8601String(),
+                'liked_ago' => $like->created_at->diffForHumans(),
+            ];
+        })
+        ->filter()
+        ->take($limit)
+        ->values()
+        ->toArray();
+
+        return response()->json([
+            'items' => $items,
+            'count' => count($items),
+            'is_authenticated' => $isAuthenticated,
+        ]);
+    }
+
+    /**
      * GET /!/simple-likes/stats-all
      */
     public function statsAll(Request $request)

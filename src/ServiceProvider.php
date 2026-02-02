@@ -7,6 +7,7 @@ use Mikomagni\SimpleLikes\Fieldtypes\SimpleLikesFieldtype;
 use Mikomagni\SimpleLikes\Tags\SimpleLike;
 use Mikomagni\SimpleLikes\Console\Commands\WarmLikesCache;
 use Mikomagni\SimpleLikes\Console\Commands\InstallSimpleLikes;
+use Mikomagni\SimpleLikes\Console\Commands\PruneGuestLikes;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\File;
 use Illuminate\Database\Schema\Blueprint;
@@ -36,6 +37,7 @@ class ServiceProvider extends AddonServiceProvider
     protected $commands = [
         WarmLikesCache::class,
         InstallSimpleLikes::class,
+        PruneGuestLikes::class,
     ];
 
     protected $routes = [

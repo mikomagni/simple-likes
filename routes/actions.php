@@ -55,3 +55,8 @@ Route::get('top-users', [SimpleLikesController::class, 'topUsers'])
 Route::get('stats-all', [SimpleLikesController::class, 'statsAll'])
     ->middleware("throttle:{$statsLimit},1")
     ->name('simple-likes.stats-all');
+
+// Wishlist endpoint - returns user's liked entries (guest or authenticated)
+Route::get('wishlist', [SimpleLikesController::class, 'wishlist'])
+    ->middleware("throttle:{$statusLimit},1")
+    ->name('simple-likes.wishlist');

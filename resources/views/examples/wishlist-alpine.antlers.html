@@ -1,0 +1,193 @@
+{{#
+    Wishlist Example (Alpine.js + API)
+    -----------------------------------
+    Client-side wishlist using Alpine.js and the /!/simple-likes/wishlist API endpoint.
+    Useful for SPAs or when you need real-time updates.
+
+    Requirements:
+    - Alpine.js must be loaded on the page
+
+    Usage:
+    {{ partial:simple-likes::examples/wishlist-alpine }}
+    {{ partial:simple-likes::examples/wishlist-alpine limit="20" collection="products" }}
+#}}
+
+{{ $limit = limit ?? 10 }}
+{{ $collection = collection ?? '' }}
+
+<div x-data="wishlist('{{ $limit }}', '{{ $collection }}')" x-init="fetchWishlist()" class="wishlist-alpine">
+    <div class="wishlist-header">
+        <h2>My Wishlist</h2>
+        <span class="wishlist-count" x-text="count + ' items'"></span>
+    </div>
+
+    <template x-if="!isAuthenticated">
+        <p class="wishlist-guest-notice">
+            You're browsing as a guest. <a href="/login">Log in</a> to save your wishlist permanently across devices.
+        </p>
+    </template>
+
+    <div x-show="loading" class="wishlist-loading">
+        <span>Loading your wishlist...</span>
+    </div>
+
+    <template x-if="!loading && items.length === 0">
+        <p class="wishlist-empty">Your wishlist is empty. Start liking entries to add them here!</p>
+    </template>
+
+    <template x-if="!loading && items.length > 0">
+        <ul class="wishlist-items">
+            <template x-for="item in items" :key="item.entry_id">
+                <li class="wishlist-item">
+                    <a :href="item.url" class="wishlist-item-link">
+                        <span class="wishlist-item-title" x-text="item.title"></span>
+                        <span class="wishlist-item-collection" x-text="item.collection"></span>
+                    </a>
+                    <span class="wishlist-item-time" x-text="item.liked_ago"></span>
+                </li>
+            </template>
+        </ul>
+    </template>
+
+    <template x-if="error">
+        <p class="wishlist-error" x-text="error"></p>
+    </template>
+</div>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('wishlist', (limit, collection) => ({
+            items: [],
+            count: 0,
+            isAuthenticated: true,
+            loading: true,
+            error: null,
+
+            async fetchWishlist() {
+                this.loading = true;
+                this.error = null;
+
+                try {
+                    const params = new URLSearchParams();
+                    if (limit) params.append('limit', limit);
+                    if (collection) params.append('collection', collection);
+
+                    const response = await fetch(`/!/simple-likes/wishlist?${params.toString()}`);
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch wishlist');
+                    }
+
+                    const data = await response.json();
+                    this.items = data.items;
+                    this.count = data.count;
+                    this.isAuthenticated = data.is_authenticated;
+                } catch (e) {
+                    this.error = 'Unable to load wishlist. Please try again.';
+                    console.error('Wishlist fetch error:', e);
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+            // Call this method to refresh the wishlist after liking/unliking
+            refresh() {
+                this.fetchWishlist();
+            }
+        }));
+    });
+</script>
+
+<style>
+    .wishlist-alpine {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+    .wishlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .wishlist-header h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    .wishlist-count {
+        background: #f3f4f6;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+    .wishlist-guest-notice {
+        background: #fef3c7;
+        border: 1px solid #fcd34d;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.875rem;
+        color: #92400e;
+    }
+    .wishlist-guest-notice a {
+        color: #d97706;
+        text-decoration: underline;
+    }
+    .wishlist-loading {
+        text-align: center;
+        padding: 2rem;
+        color: #9ca3af;
+    }
+    .wishlist-empty {
+        text-align: center;
+        padding: 2rem;
+        color: #9ca3af;
+    }
+    .wishlist-error {
+        text-align: center;
+        padding: 1rem;
+        color: #dc2626;
+        background: #fef2f2;
+        border-radius: 0.5rem;
+    }
+    .wishlist-items {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .wishlist-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    .wishlist-item:last-child {
+        border-bottom: none;
+    }
+    .wishlist-item-link {
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+    }
+    .wishlist-item-link:hover .wishlist-item-title {
+        color: #2563eb;
+    }
+    .wishlist-item-title {
+        font-weight: 500;
+        color: #111827;
+    }
+    .wishlist-item-collection {
+        font-size: 0.75rem;
+        color: #9ca3af;
+        text-transform: capitalize;
+    }
+    .wishlist-item-time {
+        font-size: 0.75rem;
+        color: #9ca3af;
+    }
+</style>
