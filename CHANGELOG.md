@@ -2,6 +2,16 @@
 
 All notable changes to Simple Likes will be documented in this file.
 
+## v6.0.0-beta.4 - 02/01/2026
+
+### Added
+
+- Wishlist feature for guests and authenticated users
+- New Antlers tags: `{{ simple_like:wishlist }}`, `{{ simple_like:wishlist_count }}`, `{{ simple_like:is_guest }}`
+- New API endpoint `/!/simple-likes/wishlist` for client-side wishlist fetching
+- Example wishlist partials (Alpine.js and server-side versions)
+- Guest likes cleanup command: `php please simple-likes:prune-guests --days=30 --dry-run`
+
 ## v6.0.0-beta.3 - 22/12/2025
 
 ### Added
